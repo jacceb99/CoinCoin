@@ -1,0 +1,27 @@
+const [imageUri, setImageUri] = useState();
+
+  //Requesting permission to use media library
+  const requestPermission = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) alert("You need to able permission to access gallery");
+  };
+
+  //Calling the request permission here as useEffect cant be in async
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
+  //Selecting image
+  const selectImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync();
+      //If the user doesent cancell
+      if (!result.cancelled) setImageUri(result.uri);
+    } catch (error) {
+      console.log("Error reading an image");
+    }
+  };
+
+
+   <Button title="Select Image" onPress={selectImage} />
+      <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
